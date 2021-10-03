@@ -2,7 +2,7 @@ const router = require("express").Router();
 const usrBL = require('../models/usersBL');
 
 router.get('/', (req, res, next) => {
-  res.send('Hello World!');
+  res.send('Hello There!');
 });
 
 //get a user
