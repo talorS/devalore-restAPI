@@ -3,17 +3,13 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
-const { before,after } = require('mocha');
+const app = require("../server");
+const chaiAppServer = chai.request(app).keepOpen();
+const { after } = require('mocha');
 
 
 describe('RESTful API', function() {
     
-    before(function (done) {
-         app = require("../server");
-         chaiAppServer = chai.request(app).keepOpen();
-         done();
-    });
-
     describe("GET /", function() {
         it("responds with a welcome message", function(done) {
             chai.request(app)
