@@ -5,8 +5,8 @@ const cors = require('cors');
 
 //------------------------Pets WS Server------------------------------------------//
 dotenv.config();
-require('./configs/petsDatabase');
-const app = express();
+var db = require('./configs/petsDatabase');
+var app = express();
 
 //middleware
 app.use(express.json());
@@ -18,8 +18,16 @@ app.use(cors());
 app.use("/api", petsRoute);
 
 // listen for requests
-app.listen(process.env.PORT, () => {
+var server = app.listen(process.env.PORT, () => {
   console.log(`===== Server is running on port ${process.env.PORT}! =====`);
+});
+
+process.once('SIGTERM', async () => {
+  await db.dbDisconnect();
+  server.close(() => {
+    console.log('===== Server closed =====')
+    process.exit(0);
+  });
 });
 
 module.exports = app;

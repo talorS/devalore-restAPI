@@ -3,12 +3,15 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
-const app = require("../server");
-const chaiAppServer = chai.request(app).keepOpen();
-const { after } = require('mocha');
+const { before,after } = require('mocha');
 
-
-describe('RESTful API', function() {
+describe('Testing RESTful API', function() {
+    
+    before((done) => {
+        app = require("../server");
+        chai.request(app).keepOpen();
+        done();
+      });
     
     describe("GET /", function() {
         it("responds with a welcome message", function(done) {
@@ -21,6 +24,7 @@ describe('RESTful API', function() {
                 });
         });
     });
+
     describe("GET /token", function() {
         it("responds with access token", function(done) {
             chai.request(app)
@@ -93,8 +97,7 @@ describe('RESTful API', function() {
     });
 
     after((done) => {
-        chaiAppServer.close();
-        console.log(`===== Server closed! =====`);
+        process.emit('SIGTERM');
         done();
       });
 });
