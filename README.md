@@ -1,4 +1,4 @@
--get access token - api example:
+-get an access token - api example:
 http://localhost:8080/api/token
 
 **after you have the token, save the value under request headers with key 'x-access-token' **
