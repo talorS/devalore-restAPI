@@ -8,20 +8,20 @@ router.get('/', (req, res, next) => {
 });
 
 //get all pets
-router.get("/pets", async (req, res, next) => {
+router.get("/pets",auth, async (req, res, next) => {
   const resp = await petBL.getPets(req.query);
   res.status(200).json(resp);
 });
 
 //post a pet
-router.post("/pet",async (req, res, next) => {
+router.post("/pet",auth,async (req, res, next) => {
   const obj = req.body;
   const resp = await petBL.addPet(obj);
   res.status(200).json(resp);
 });
 
 //delete a pet
-router.delete("/pet",async (req, res, next) => {
+router.delete("/pet",auth,async (req, res, next) => {
   const name = req.query.name;
   const resp = await petBL.deletePet(name);
   res.status(200).json(resp);
