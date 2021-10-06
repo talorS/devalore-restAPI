@@ -3,6 +3,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
+const expect = chai.expect;
 const { before,after } = require('mocha');
 
 describe('Testing RESTful API', function() {
@@ -37,7 +38,7 @@ describe('Testing RESTful API', function() {
 
     
     describe("GET /pets", function() {
-        it("responds with all pets", function() {
+        it("responds with all pets", function(done) {
             chai.request(app)
             .get('/api/pets??page=5&limit=10')
             .set('x-access-token', token)
@@ -45,13 +46,14 @@ describe('Testing RESTful API', function() {
                 res.should.have.status(200);
                 res.body.should.be.a('Object');
                 res.body.results.should.be.a('Array');
-                console.log(res.body);
+                expect(res.body.results).to.have.lengthOf(10);
+                done()
             });
         });
     });
 
     describe("POST /pet", function() {
-        it("responds with a new pet", function() {
+        it("responds with a new pet", function(done) {
             chai.request(app)
             .post('/api/pet')
             .set('content-type', 'application/x-www-form-urlencoded')
@@ -63,29 +65,35 @@ describe('Testing RESTful API', function() {
             })
             .end((err, res) => {
                 res.should.have.status(200);
+                expect(res.body).to.have.string('added');
+                done();
             });
         });
     });
 
     describe("DELETE /pet", function() {
-        it("responds with deleted pet", function() {
+        it("responds with deleted pet", function(done) {
             chai.request(app)
             .delete('/api/pet?name=talor')
             .set('x-access-token', token)
             .end((err, res) => {
                 res.should.have.status(200);
+                expect(res.body).to.have.string('deleted');
+                done();
             });
         });
     });
     
     describe("GET /calculates/pets-ages", function() {
-        it("responds with age calculation", function() {
+        it("responds with age calculation", function(done) {
             chai.request(app)
             .get('/api/calculates/pets-ages')
             .set('x-access-token', token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.totalAges.should.be.a('Number');
+                expect(res.body.totalAges).to.not.eql(0);
+                done();
             });
         });
     });
