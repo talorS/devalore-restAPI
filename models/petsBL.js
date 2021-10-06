@@ -19,9 +19,7 @@ exports.getPets = async function (obj) {
   const limit = obj.limit && obj.limit > 0? obj.limit : DEFAULT_LIMIT;
   let petsList = await dal.getPets().catch(err => console.error(err.message));
   petsList = petsList.filter(pet => pet.deleted_at === undefined);
-  const indexOfLastPet = page * limit;
-  const indexOfFirstPet = indexOfLastPet - limit;
-  const currentList = petsList.slice(indexOfFirstPet, indexOfLastPet);
+  const currentList = petsList.slice((page - 1) * limit, page * limit);
   return {results : currentList, totalItems : currentList.length};
 }
 

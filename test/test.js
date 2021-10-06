@@ -39,12 +39,13 @@ describe('Testing RESTful API', function() {
     describe("GET /pets", function() {
         it("responds with all pets", function() {
             chai.request(app)
-            .get('/api/pets')
+            .get('/api/pets??page=5&limit=10')
             .set('x-access-token', token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('Object');
                 res.body.results.should.be.a('Array');
+                console.log(res.body);
             });
         });
     });
@@ -56,8 +57,8 @@ describe('Testing RESTful API', function() {
             .set('content-type', 'application/x-www-form-urlencoded')
             .set('x-access-token', token)
             .send({
-                name : "cati",
-                type : "Cat",
+                name : "i1",
+                type : "Insect",
                 age : 8
             })
             .end((err, res) => {
