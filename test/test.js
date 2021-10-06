@@ -7,40 +7,37 @@ const { before,after } = require('mocha');
 
 describe('Testing RESTful API', function() {
     
-    before((done) => {
+    before(() => {
         app = require("../server");
-        chai.request(app).keepOpen();
-        done();
+        chaiServer = chai.request(app).keepOpen();
       });
     
     describe("GET /", function() {
-        it("responds with a welcome message", function(done) {
+        it("responds with a welcome message", function() {
             chai.request(app)
                 .get('/api')
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.text.should.be.eql('Welcome to Pets Service!');
-                    done();
                 });
         });
     });
 
     describe("GET /token", function() {
-        it("responds with access token", function(done) {
+        it("responds with access token", function() {
             chai.request(app)
             .get('/api/token')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('Object');
                 token = res.body.token;
-                done();
             });
         });
     });
 
     
     describe("GET /pets", function() {
-        it("responds with all pets", function(done) {
+        it("responds with all pets", function() {
             chai.request(app)
             .get('/api/pets')
             .set('x-access-token', token)
@@ -48,13 +45,12 @@ describe('Testing RESTful API', function() {
                 res.should.have.status(200);
                 res.body.should.be.a('Object');
                 res.body.results.should.be.a('Array');
-                done();
             });
         });
     });
 
     describe("POST /pet", function() {
-        it("responds with a new pet", function(done) {
+        it("responds with a new pet", function() {
             chai.request(app)
             .post('/api/pet')
             .set('content-type', 'application/x-www-form-urlencoded')
@@ -66,38 +62,35 @@ describe('Testing RESTful API', function() {
             })
             .end((err, res) => {
                 res.should.have.status(200);
-                done();
             });
         });
     });
 
     describe("DELETE /pet", function() {
-        it("responds with deleted pet", function(done) {
+        it("responds with deleted pet", function() {
             chai.request(app)
             .delete('/api/pet?name=talor')
             .set('x-access-token', token)
             .end((err, res) => {
                 res.should.have.status(200);
-                done();
             });
         });
     });
     
     describe("GET /calculates/pets-ages", function() {
-        it("responds with age calculation", function(done) {
+        it("responds with age calculation", function() {
             chai.request(app)
             .get('/api/calculates/pets-ages')
             .set('x-access-token', token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.totalAges.should.be.a('Number');
-                done();
             });
         });
     });
 
-    after((done) => {
+    after(() => {
+        chaiServer.close();
         process.emit('SIGTERM');
-        done();
       });
 });
