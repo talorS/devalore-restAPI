@@ -1,81 +1,98 @@
 process.env.NODE_ENV = 'test';
-const dal = require('../DAL/fileWriter');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
-var path = require('path');
 const { before,after } = require('mocha');
-const baseDir = path.join(__dirname, '..', 'assets', 'users.json');
-
-const data = {
-    duncan_long: { id: "drekaner", name: 'Duncan Long', favorite_color: 'Blue' },
-    kelsea_head: { id: "wagshark", name: 'Kelsea Head', favorite_color: 'Ping' },
-    phoenix_knox: { id: "jikininer", name: 'Phoenix Knox', favorite_color: 'Green' },
-    adina_norton: { id: "slimewagner", name: 'Adina Norton', favorite_color: 'Red' }
-};
 
 
 describe('RESTful API', function() {
     
-    before(async function () {
-         await dal.writeDataToFile(baseDir, data);
+    before(function (done) {
          app = require("../server");
          chaiAppServer = chai.request(app).keepOpen();
+         done();
     });
 
     describe("GET /", function() {
-        it("responds with Hello World!", function() {
+        it("responds with a welcome message", function(done) {
             chai.request(app)
-                .get('/')
+                .get('/api')
                 .end((err, res) => {
-                    res.text.should.be.eql('Hello World!');
                     res.should.have.status(200);
+                    res.text.should.be.eql('Welcome to Pets Service!');
+                    done();
                 });
         });
     });
-
-        describe("GET /users", function() {
-            it("responds with all users", function() {
-                chai.request(app)
-                    .get('/users')
-                    .end((err, res) => {
-                        var checkObj = {
-                            duncan_long: { name: 'Duncan Long', favorite_color: 'Blue' },
-                            kelsea_head: { name: 'Kelsea Head', favorite_color: 'Ping' },
-                            phoenix_knox: { name: 'Phoenix Knox', favorite_color: 'Green' },
-                            adina_norton: { name: 'Adina Norton', favorite_color: 'Red' }
-                        }
-                        res.body.should.be.eql(checkObj);
-                        res.should.have.status(200);
-                        res.body.should.be.a('object');
-                    });
-            });
-        });
-     
-        describe("GET /user", function() {
-            it("responds with a user which is not exists", function() {
-                chai.request(app)
-                    .get('/user/talor')
-                    .end((err, res) => {
-                        res.body.should.be.eql('User does not exist');
-                        res.should.have.status(404);
-                    });
-            });
-        });
-
-    describe("GET /user", function() {
-        it("responds with a user which exists", function() {
+    describe("GET /token", function() {
+        it("responds with access token", function(done) {
             chai.request(app)
-                .get('/user/duncan_long')
-                .end((err, res) => {
-                    var checkObj = {
-                        duncan_long: { id: "drekaner", name: 'Duncan Long', favorite_color: 'Blue' }
-                    }
-                    res.body.should.be.eql(checkObj);
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                });
+            .get('/api/token')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('Object');
+                token = res.body.token;
+                done();
+            });
+        });
+    });
+
+    
+    describe("GET /pets", function() {
+        it("responds with all pets", function(done) {
+            chai.request(app)
+            .get('/api/pets')
+            .set('x-access-token', token)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('Object');
+                res.body.results.should.be.a('Array');
+                done();
+            });
+        });
+    });
+
+    describe("POST /pet", function() {
+        it("responds with a new pet", function(done) {
+            chai.request(app)
+            .post('/api/pet')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .set('x-access-token', token)
+            .send({
+                name : "cati",
+                type : "Cat",
+                age : 8
+            })
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+        });
+    });
+
+    describe("DELETE /pet", function() {
+        it("responds with deleted pet", function(done) {
+            chai.request(app)
+            .delete('/api/pet?name=talor')
+            .set('x-access-token', token)
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+        });
+    });
+    
+    describe("GET /calculates/pets-ages", function() {
+        it("responds with age calculation", function(done) {
+            chai.request(app)
+            .get('/api/calculates/pets-ages')
+            .set('x-access-token', token)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.totalAges.should.be.a('Number');
+                done();
+            });
         });
     });
 
