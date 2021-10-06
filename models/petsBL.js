@@ -18,7 +18,9 @@ exports.getPets = async function (obj) {
   const page = obj.page && obj.page > 0? obj.page : DEFAULT_PAGE;
   const limit = obj.limit && obj.limit > 0? obj.limit : DEFAULT_LIMIT;
   let petsList = await dal.getPets().catch(err => console.error(err.message));
+  //filter only exist pets (without deleted timestamp)
   petsList = petsList.filter(pet => pet.deleted_at === undefined);
+  //pagination
   const currentList = petsList.slice((page - 1) * limit, page * limit);
   return {results : currentList, totalItems : currentList.length};
 }
