@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-//create ORM modeling
-let petSchema = new mongoose.Schema({
+//create ORM for mongoDB
+const petSchema = new mongoose.Schema({
   name: {
     type: String,
     require: true,

@@ -7,32 +7,32 @@ router.get('/', (req, res, next) => {
   res.send('Welcome to Pets Service!');
 });
 
-//get all pets
+//get all pets end-point
 router.get("/pets",auth, async (req, res, next) => {
   const resp = await petBL.getPets(req.query);
   res.status(200).json(resp);
 });
 
-//post a pet
+//post a pet end-point
 router.post("/pet",auth,async (req, res, next) => {
   const obj = req.body;
   const resp = await petBL.addPet(obj);
   res.status(200).json(resp);
 });
 
-//delete a pet
+//delete a pet end-point
 router.delete("/pet",auth,async (req, res, next) => {
   const name = req.query.name;
   const resp = await petBL.deletePet(name);
   res.status(200).json(resp);
 });
 
-//get the token
+//get the access token
 router.get("/token", (req, res, next) => { 
   res.status(200).json({token : authBL.getToken()});
 });
 
-//get the pets-ages
+//get all pets ages
 router.get("/calculates/pets-ages",auth,async (req, res, next) => { 
   const resp = await petBL.calcAges();
   res.status(200).json({totalAges : resp});

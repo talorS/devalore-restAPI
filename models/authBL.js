@@ -4,7 +4,7 @@ const accessTokenSecret = require('../configs/secretJWT');
 //generte jwt access token 
 exports.getToken = function () {
   try {
-      const accessToken = jwt.sign({ data: '' },
+      const accessToken = jwt.sign( '',
           accessTokenSecret,
           { expiresIn: process.env.JWT_EXPIRATION, }
       );

@@ -1,7 +1,6 @@
 const petsModel = require('../models/petsModel');
 
-
-//get all pets from db
+//get all pets from DB
 exports.getPets = function () {
     return new Promise((resolve, reject) => {
         petsModel.find({}, function (err, pets) {
@@ -15,7 +14,7 @@ exports.getPets = function () {
     });
 }
 
-//add a pet to the db
+//add a pet to the DB
 exports.addPet = function (obj) {
     return new Promise((resolve, reject) => {
         let pet = new petsModel(obj);
@@ -31,7 +30,7 @@ exports.addPet = function (obj) {
     });
 }
 
-//do soft delete to a pet (update 'deleted_at' field)
+//do a 'soft delete' to a pet (update 'deleted_at' field)
 exports.deletePet = function (pName) {
     return new Promise((resolve, reject) => {
         petsModel.findOneAndUpdate({name : pName},{deleted_at : Date.now()}, function (err, pet) {
@@ -55,12 +54,12 @@ exports.calcPetsAges = function () {
                     $sum: "$age"
                 }
             }
-        }], function (err, sum) {
+        }], function (err, data) {
             if (err) {
                 reject(err);
             }
             else {
-                resolve(sum[0]? sum[0].total : 0);
+                resolve(data[0]? data[0].total : 0);
             }
         })
     });
