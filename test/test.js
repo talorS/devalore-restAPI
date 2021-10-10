@@ -59,7 +59,7 @@ describe('Testing RESTful API', function() {
             .set('x-access-token', token)
             .send({
                 name : "i1",
-                type : "Insect",
+                type : "Bag",
                 age : 8
             })
             .end((err, res) => {

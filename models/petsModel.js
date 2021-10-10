@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const petSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    require: true
   },
   deleted_at: {
     type: Date, 
@@ -16,11 +16,12 @@ const petSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    required: true,
+    enum: ['Dog', 'Cat','Hourse','Bag'],
+    required: true
   },
   age: {
     type: Number,
-    required: true,
+    required: true
   }
 });
 

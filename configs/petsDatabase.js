@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // connect to mongoDB through mongoose
 mongoose.connect(process.env.MONGO_URL,
     { useNewUrlParser: true, useUnifiedTopology: true}).
-    catch(error => console.error(error));
+    catch(error => console.error('Failed to connect to MongoDB',error));
     
 mongoose.connection.once('open', () => {
     console.log('Database connected successfully');
