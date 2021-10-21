@@ -38,7 +38,7 @@ exports.deletePet = function (pName) {
                 reject(err);
             }
             else {
-                resolve(`pet ${pet._id} deleted!`);
+                resolve(pet? `pet ${pet._id} deleted!` : `pet ${pName} not exist!`);
             }
         });
     })

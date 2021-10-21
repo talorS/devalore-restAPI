@@ -3,7 +3,7 @@ const accessTokenSecret = require('../configs/secretJWT');
 
 //verift jwt token sent from client
 const verifyToken = (req, res, next) => {
-  const token = req.headers['x-access-token'];
+  const token = req.headers['x-access-token'] || req.headers.authorization?.replace('Bearer ','');
     if (token) {
         jwt.verify(token, accessTokenSecret, (err, data) => {
             if (err) {

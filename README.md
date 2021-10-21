@@ -7,7 +7,7 @@ http://localhost:8080/api/token
 GET : http://localhost:8080/api/pets?page=1&limit=10
 
 (without - apply with default values: page=1, limit=10)
-GET REQUEST: http://localhost:8080/api/pets?
+GET REQUEST: http://localhost:8080/api/pets
 
 -call calculate ages - api example:
 GET REQUEST: http://localhost:8080/api/calculates/pets-ages

@@ -13,5 +13,8 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+# application server port
 EXPOSE 8080
+
+# default run command
 CMD [ "node", "server.js" ]
