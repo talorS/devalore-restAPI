@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import accessTokenSecret from '@configs/secretJWT';
 
-const getToken = function () {
+const getToken = () => {
     try {
         const accessToken = jwt.sign({ data: '' },
             accessTokenSecret,

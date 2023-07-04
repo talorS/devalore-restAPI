@@ -46,6 +46,7 @@
     "@routes": "dist/src/routes",
     "@configs": "dist/src/configs",
     "@DAL": "dist/src/DAL",
-    "@controller": "dist/src/controller"
+    "@controller": "dist/src/controller",
+    "@types": "dist/src/types"
   }
 }

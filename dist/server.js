@@ -12,7 +12,7 @@ const swagger_ui_express_1 = tslib_1.__importDefault(require("swagger-ui-express
 const express_mongo_sanitize_1 = tslib_1.__importDefault(require("express-mongo-sanitize"));
 //------------------------Pets WS Server------------------------------------------//
 dotenv_1.default.config();
-(0, petsDatabase_1.connectDB)();
+//connectDB();
 const app = (0, express_1.default)();
 //middleware
 app.use(express_1.default.json());

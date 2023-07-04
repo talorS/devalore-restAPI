@@ -5,7 +5,7 @@ export interface ConnectionOptionsExtend extends ConnectOptions {
     useUnifiedTopology: boolean
 }
 
-enum PetType {
+export enum PetType {
     DOG = 'Dog',
     CAT = 'Cat',
     HORSE = 'Horse',

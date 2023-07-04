@@ -3,6 +3,6 @@ declare namespace NodeJS {
         PORT: string;
         MONGO_URL: string;
         ACCESS_TOKEN_SECRET: string;
-        EXPIRY: string;
+        JWT_EXPIRATION: string;
     }
 }

@@ -1,4 +1,4 @@
-import { PetSchema } from '@types';
+import { PetSchema, PetType } from '@types';
 import { Schema, model } from 'mongoose';
 
 //create ORM for mongoDB
@@ -17,7 +17,7 @@ const petSchema = new Schema<PetSchema>({
   },
   type: {
     type: String,
-    enum: ['Dog', 'Cat', 'Horse', 'Bag'],
+    enum: PetType,
     required: true
   },
   age: {

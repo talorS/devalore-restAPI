@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const _types_1 = require("@types");
 const mongoose_1 = require("mongoose");
 //create ORM for mongoDB
 const petSchema = new mongoose_1.Schema({
@@ -17,7 +18,7 @@ const petSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: ['Dog', 'Cat', 'Horse', 'Bag'],
+        enum: _types_1.PetType,
         required: true
     },
     age: {

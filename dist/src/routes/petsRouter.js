@@ -10,8 +10,10 @@ router.get('/', (req, res, next) => {
     res.redirect('/api-docs');
 });
 //get all pets end-point
-router.get("/pets", authJWT_1.default, (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-    const resp = yield (0, petsBL_1.getPets)(req.query);
+router.get("/pets", /*auth,*/ (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+    const page = req.query.page;
+    const limit = req.query.limit;
+    const resp = yield (0, petsBL_1.getPets)({ page, limit });
     res.status(200).json(resp);
 }));
 //post a pet end-point

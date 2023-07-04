@@ -6,9 +6,10 @@ const petsRepository_1 = tslib_1.__importDefault(require("@DAL/petsRepository"))
 const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
 //call add pet query
-const addPet = (obj) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+const addPet = (petObj) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield petsRepository_1.default.addPet(obj);
+        const resp = yield petsRepository_1.default.addPet(petObj);
+        return resp;
     }
     catch (err) {
         console.error(err.message);
@@ -19,7 +20,8 @@ exports.addPet = addPet;
 //call delete pet query
 const deletePet = (name) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield petsRepository_1.default.deletePet(name);
+        const resp = yield petsRepository_1.default.deletePet(name);
+        return resp;
     }
     catch (err) {
         console.error(err.message);
@@ -27,10 +29,10 @@ const deletePet = (name) => tslib_1.__awaiter(void 0, void 0, void 0, function* 
 });
 exports.deletePet = deletePet;
 //call get all pets query and do manipulations on the data (based on page/limit)
-const getPets = (obj) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+const getPets = (params) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
-        const page = obj.page && obj.page > 0 ? obj.page : DEFAULT_PAGE;
-        const limit = obj.limit && obj.limit > 0 ? obj.limit : DEFAULT_LIMIT;
+        const page = params.page ? +params.page : DEFAULT_PAGE;
+        const limit = params.limit ? +params.limit : DEFAULT_LIMIT;
         const petsList = yield petsRepository_1.default.getPets();
         //filter only exist pets (without deleted_at timestamp) + pagination
         const currentList = petsList
@@ -46,7 +48,8 @@ exports.getPets = getPets;
 //call calc ages query
 const calcAges = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield petsRepository_1.default.calcPetsAges();
+        const petsAges = yield petsRepository_1.default.calcPetsAges();
+        return petsAges;
     }
     catch (err) {
         console.error(err.message);
