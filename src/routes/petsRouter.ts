@@ -10,7 +10,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 //get all pets end-point
-router.get("/pets", /*auth,*/ async (req: Request, res: Response, next: NextFunction) => {
+router.get("/pets", auth, async (req: Request, res: Response, next: NextFunction) => {
   const page = req.query.page as string;
   const limit = req.query.limit as string;
   const resp = await getPets({ page, limit });
