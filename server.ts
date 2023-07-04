@@ -1,21 +1,24 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const petsRoute = require("./routes/petsRouter");
-const cors = require('cors');
-const { connectDB, dbDisconnect } = require('./configs/petsDatabase');
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUI = require('swagger-ui-express');
+import 'module-alias/register';
+import express from "express";
+import dotenv from "dotenv";
+import petsRoute from "@routes/petsRouter";
+import cors from 'cors';
+import { connectDB, dbDisconnect } from '@configs/petsDatabase';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
+import mongoSanitize from 'express-mongo-sanitize';
 
 //------------------------Pets WS Server------------------------------------------//
 dotenv.config();
 connectDB();
-var app = express();
+const app = express();
 
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //Allowing get requests (access) from any unknown domains 
 app.use(cors());
+app.use(mongoSanitize());
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -161,16 +164,17 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use("/api", petsRoute);
 
 // listen for requests
-var server = app.listen(process.env.PORT, () => {
+const PORT = +process.env.PORT || 8080;
+const server = app.listen(PORT, () => {
   console.log(`===== Server is running on port ${process.env.PORT}! =====`);
 });
 
 process.once('SIGTERM', async () => {
-  await dbDisconnect();
+  await dbDisconnect().catch(e => console.error(e));
   server.close(() => {
     console.log('===== Server closed =====')
     process.exit(0);
   });
 });
 
-module.exports = app;
+export default app;

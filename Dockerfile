@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8080
 
 # default run command
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]

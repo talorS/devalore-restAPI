@@ -1,8 +1,7 @@
-const jwt = require("jsonwebtoken");
-const accessTokenSecret = require('../configs/secretJWT');
+import jwt from "jsonwebtoken";
+import accessTokenSecret from '@configs/secretJWT';
 
-//generte jwt access token 
-exports.getToken = function () {
+const getToken = function () {
     try {
         const accessToken = jwt.sign({ data: '' },
             accessTokenSecret,
@@ -13,3 +12,5 @@ exports.getToken = function () {
         return { status: 500, data: err.message };
     }
 }
+
+export default getToken;

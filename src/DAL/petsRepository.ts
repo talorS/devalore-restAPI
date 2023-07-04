@@ -1,7 +1,8 @@
-const petsModel = require('../models/petsModel');
+import petsModel from '@models/petsModel';
+import { PetSchema } from '@types';
 
 //get all pets from DB
-exports.getPets = function () {
+const getPets = (): Promise<PetSchema[]> => {
     return new Promise((resolve, reject) => {
         petsModel.find({}, function (err, pets) {
             if (err) {
@@ -15,10 +16,9 @@ exports.getPets = function () {
 }
 
 //add a pet to the DB
-exports.addPet = function (obj) {
+const addPet = (petObj: PetSchema): Promise<string> => {
     return new Promise((resolve, reject) => {
-        let pet = new petsModel(obj);
-
+        const pet = new petsModel(petObj);
         pet.save(err => {
             if (err) {
                 reject(err);
@@ -31,21 +31,22 @@ exports.addPet = function (obj) {
 }
 
 //do a 'soft delete' to a pet (update 'deleted_at' field)
-exports.deletePet = function (pName) {
+const deletePet = (pName: string): Promise<string> => {
     return new Promise((resolve, reject) => {
-        petsModel.findOneAndUpdate({name : pName},{deleted_at : Date.now()}, function (err, pet) {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve(pet? `pet ${pet._id} deleted!` : `pet ${pName} not exist!`);
-            }
-        });
+        petsModel.findOneAndUpdate({ name: pName }, { deleted_at: new Date() },
+            function (err, pet: PetSchema) {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve(pet ? `pet ${pet._id} deleted!` : `pet ${pName} not exist!`);
+                }
+            });
     })
 }
 
 //calculate the total ages of all the pets in DB
-exports.calcPetsAges = function () {
+const calcPetsAges = (): Promise<number> => {
     return new Promise((resolve, reject) => {
         petsModel.aggregate([{
             $group: {
@@ -59,8 +60,15 @@ exports.calcPetsAges = function () {
                 reject(err);
             }
             else {
-                resolve(data[0]? data[0].total : 0);
+                resolve(data[0] ? data[0].total : 0);
             }
         })
     });
+}
+
+export default {
+    calcPetsAges,
+    deletePet,
+    addPet,
+    getPets
 }

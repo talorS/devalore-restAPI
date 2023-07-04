@@ -1,9 +1,9 @@
-const jwt = require("jsonwebtoken");
-const accessTokenSecret = require('../configs/secretJWT');
+import jwt from "jsonwebtoken";
+import accessTokenSecret from '@configs/secretJWT';
 
 //verift jwt token sent from client
 const verifyToken = (req, res, next) => {
-  const token = req.headers['x-access-token'] || req.headers.authorization?.replace('Bearer ','');
+    const token = req.headers['x-access-token'] || req.headers.authorization?.replace('Bearer ', '');
     if (token) {
         jwt.verify(token, accessTokenSecret, (err, data) => {
             if (err) {
@@ -16,4 +16,4 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-module.exports = verifyToken;
+export default verifyToken;
