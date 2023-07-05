@@ -9,10 +9,10 @@ const DEFAULT_PAGE = 1;
 const addPet = (petObj) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const resp = yield petsRepository_1.default.addPet(petObj);
-        return resp;
+        return { status: 200, data: resp };
     }
     catch (err) {
-        console.error(err.message);
+        return { status: 400, data: err.message };
     }
     ;
 });
@@ -21,10 +21,10 @@ exports.addPet = addPet;
 const deletePet = (name) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const resp = yield petsRepository_1.default.deletePet(name);
-        return resp;
+        return { status: 200, data: resp };
     }
     catch (err) {
-        console.error(err.message);
+        return { status: 400, data: err.message };
     }
 });
 exports.deletePet = deletePet;
@@ -38,10 +38,10 @@ const getPets = (params) => tslib_1.__awaiter(void 0, void 0, void 0, function* 
         const currentList = petsList
             .filter(pet => pet.deleted_at === undefined)
             .slice((page - 1) * limit, page * limit);
-        return { results: currentList, totalItems: currentList.length };
+        return { status: 200, data: { results: currentList, totalItems: currentList.length } };
     }
     catch (err) {
-        console.error(err.message);
+        return { status: 400, data: err.message };
     }
 });
 exports.getPets = getPets;
@@ -49,10 +49,10 @@ exports.getPets = getPets;
 const calcAges = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const petsAges = yield petsRepository_1.default.calcPetsAges();
-        return petsAges;
+        return { status: 200, data: petsAges };
     }
     catch (err) {
-        console.error(err.message);
+        return { status: 400, data: err.message };
     }
     ;
 });

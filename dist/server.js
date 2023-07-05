@@ -6,6 +6,7 @@ const express_1 = tslib_1.__importDefault(require("express"));
 const dotenv_1 = tslib_1.__importDefault(require("dotenv"));
 const petsRouter_1 = tslib_1.__importDefault(require("@routes/petsRouter"));
 const cors_1 = tslib_1.__importDefault(require("cors"));
+const morgan_1 = tslib_1.__importDefault(require("morgan"));
 const petsDatabase_1 = require("@configs/petsDatabase");
 const swagger_jsdoc_1 = tslib_1.__importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = tslib_1.__importDefault(require("swagger-ui-express"));
@@ -17,7 +18,7 @@ const app = (0, express_1.default)();
 //middleware
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
-//Allowing get requests (access) from any unknown domains 
+app.use((0, morgan_1.default)("tiny"));
 app.use((0, cors_1.default)());
 app.use((0, express_mongo_sanitize_1.default)());
 const swaggerOptions = {

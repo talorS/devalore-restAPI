@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 import petsRoute from "@routes/petsRouter";
 import cors from 'cors';
+import morgan from "morgan";
 import { connectDB, dbDisconnect } from '@configs/petsDatabase';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
@@ -16,7 +17,7 @@ const app = express();
 //middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//Allowing get requests (access) from any unknown domains 
+app.use(morgan("tiny"));
 app.use(cors());
 app.use(mongoSanitize());
 

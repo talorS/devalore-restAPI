@@ -1,51 +1,42 @@
 import express, { NextFunction, Request, Response } from "express";
 import { addPet, calcAges, deletePet, getPets } from '@controller/petsBL';
-import auth from "@middleware/authJWT";
+import { validateGuard, } from "@middleware/validator";
+import authGuard from "@middleware/authJWT";
 import getToken from "@controller/authBL";
 
 const router = express.Router();
 
-router.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.redirect('/api-docs');
-});
-
 //get all pets end-point
-router.get("/pets", auth, async (req: Request, res: Response, next: NextFunction) => {
+router.get("/pets", authGuard, async (req: Request, res: Response, next: NextFunction) => {
   const page = req.query.page as string;
   const limit = req.query.limit as string;
   const resp = await getPets({ page, limit });
-  res.status(200).json(resp);
+  res.status(resp.status).json(resp.data);
 });
 
 //post a pet end-point
-router.post("/pet", auth, async (req: Request, res: Response, next: NextFunction) => {
+router.post("/pet", authGuard, async (req: Request, res: Response, next: NextFunction) => {
   const resp = await addPet(req.body);
-  res.status(200).json(resp);
+  res.status(resp.status).json(resp.data);
 });
 
 //delete a pet end-point
-router.delete("/pet", auth, async (req: Request, res: Response, next: NextFunction) => {
+router.delete("/pet", validateGuard, authGuard, async (req: Request, res: Response, next: NextFunction) => {
   const name = req.query.name as string;
   const resp = await deletePet(name);
-  res.status(200).json(resp);
+  res.status(resp.status).json(resp.data);
 });
 
 //get the access token
 router.get("/token", (req: Request, res: Response, next: NextFunction) => {
   const resp = getToken();
-  res.status(resp.status).json({ token: resp.data });
+  res.status(resp.status).json(resp.data);
 });
 
 //get all pets ages
-router.get("/calculates/pets-ages", auth, async (req: Request, res: Response, next: NextFunction) => {
+router.get("/calculates/pets-ages", authGuard, async (req: Request, res: Response, next: NextFunction) => {
   const resp = await calcAges();
-  res.status(200).json({ totalAges: resp });
+  res.status(resp.status).json(resp.data);
 });
-
-
-router.get("*", function (req: Request, res: Response, next: NextFunction) {
-  res.redirect('/api-docs');
-});
-
 
 export default router;

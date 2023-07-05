@@ -4,27 +4,28 @@ const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
 
 //call add pet query
-const addPet = async (petObj: PetSchema): Promise<string> => {
+const addPet = async (petObj: PetSchema): Promise<{ status: number; data: any }> => {
   try {
     const resp = await petsRepository.addPet(petObj);
-    return resp;
+    return { status: 200, data: resp };
   } catch (err) {
-    console.error(err.message);
+    return { status: 400, data: err.message };
   };
 }
 
 //call delete pet query
-const deletePet = async (name: string): Promise<string> => {
+const deletePet = async (name: string): Promise<{ status: number; data: any }> => {
   try {
     const resp = await petsRepository.deletePet(name);
-    return resp;
+    return { status: 200, data: resp };
   } catch (err) {
-    console.error(err.message);
+    return { status: 400, data: err.message };
   }
 }
 
 //call get all pets query and do manipulations on the data (based on page/limit)
-const getPets = async (params: { page: string; limit: string }) => {
+const getPets = async (params: { page: string; limit: string })
+  : Promise<{ status: number; data: any }> => {
   try {
     const page = params.page ? +params.page : DEFAULT_PAGE;
     const limit = params.limit ? +params.limit : DEFAULT_LIMIT;
@@ -33,19 +34,19 @@ const getPets = async (params: { page: string; limit: string }) => {
     const currentList = petsList
       .filter(pet => pet.deleted_at === undefined)
       .slice((page - 1) * limit, page * limit);
-    return { results: currentList, totalItems: currentList.length };
+    return { status: 200, data: { results: currentList, totalItems: currentList.length } };
   } catch (err) {
-    console.error(err.message)
+    return { status: 400, data: err.message };
   }
 }
 
 //call calc ages query
-const calcAges = async (): Promise<number> => {
+const calcAges = async (): Promise<{ status: number; data: any }> => {
   try {
     const petsAges = await petsRepository.calcPetsAges();
-    return petsAges;
+    return { status: 200, data: petsAges };
   } catch (err) {
-    console.error(err.message);
+    return { status: 400, data: err.message };
   };
 }
 

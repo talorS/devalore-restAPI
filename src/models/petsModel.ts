@@ -5,7 +5,7 @@ import { Schema, model } from 'mongoose';
 const petSchema = new Schema<PetSchema>({
   name: {
     type: String,
-    require: true
+    required: [true, 'name is required.']
   },
   deleted_at: {
     type: Date,
@@ -17,12 +17,15 @@ const petSchema = new Schema<PetSchema>({
   },
   type: {
     type: String,
-    enum: PetType,
-    required: true
+    enum: {
+      values: Object.values(PetType),
+      message: `type is either: ${Object.values(PetType).join(',')}.`
+    },
+    required: [true, 'type is required.']
   },
   age: {
     type: Number,
-    required: true
+    required: [true, 'age is required.']
   }
 });
 

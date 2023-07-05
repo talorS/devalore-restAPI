@@ -6,7 +6,7 @@ const mongoose_1 = require("mongoose");
 const petSchema = new mongoose_1.Schema({
     name: {
         type: String,
-        require: true
+        required: [true, 'name is required.']
     },
     deleted_at: {
         type: Date,
@@ -18,12 +18,15 @@ const petSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: _types_1.PetType,
-        required: true
+        enum: {
+            values: Object.values(_types_1.PetType),
+            message: `type is either: ${Object.values(_types_1.PetType).join(',')}.`
+        },
+        required: [true, 'type is required.']
     },
     age: {
         type: Number,
-        required: true
+        required: [true, 'age is required.']
     }
 });
 exports.default = (0, mongoose_1.model)('pets', petSchema);
